@@ -1,6 +1,4 @@
-// api/upload.js
 import formidable from "formidable";
-import fs from "fs";
 
 // Disable next.js body parser
 export const config = {
@@ -21,15 +19,7 @@ export default async function handler(req, res) {
       res.status(500).send("File upload error!");
       return;
     }
-    const oldPath = files.file.filepath;
-    const newPath = "./public/uploads/" + files.file.originalFilename;
-
-    fs.copyFile(oldPath, newPath, (err) => {
-      if (err) {
-        res.status(500).send("Saving file failed!");
-        return;
-      }
-      res.status(200).send("File uploaded successfully!");
-    });
+    // Instead of saving to local, just check filename:
+    res.status(200).send("File " + files.file.originalFilename + " uploaded (temporary)!");
   });
 }
