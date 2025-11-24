@@ -1,3 +1,24 @@
+// USERNAME & PASSWORD (change for security, DON'T show real credentials in public code)
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "1234";
+
+function adminLogin() {
+  const user = document.getElementById('adminUser').value;
+  const pass = document.getElementById('adminPass').value;
+  if (user === ADMIN_USER && pass === ADMIN_PASS) {
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+  } else {
+    document.getElementById('loginMsg').textContent = 'Invalid credentials!';
+  }
+}
+
+// baaki adminPanel ke code ko window.onload = fetchFiles; ke andar wrap kar do!
+window.onload = function() {
+  // Automatically hide adminPanel until login successful
+  document.getElementById('adminPanel').style.display = 'none';
+};
+
 const fileListEl = document.getElementById("fileList");
 const searchEl = document.getElementById("search");
 const msgEl = document.getElementById("msg");
