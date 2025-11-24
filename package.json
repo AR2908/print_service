@@ -1,7 +1,7 @@
 {
   "name": "file-upload-portal",
   "version": "1.0.0",
-  "description": "A file upload portal with admin backend using Node.js on Vercel",
+  "description": "A file upload portal...",
   "main": "api/upload.js",
   "scripts": {
     "start": "node api/upload.js"
@@ -9,12 +9,5 @@
   "dependencies": {
     "formidable": "^3.4.0"
   },
-  "keywords": [
-    "file-upload",
-    "nodejs",
-    "vercel",
-    "formidable"
-  ],
-  "author": "Your Name",
-  "license": "ISC"
+  "type": "module"
 }
