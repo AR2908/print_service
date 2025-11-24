@@ -1,4 +1,5 @@
-import formidable from "formidable";
+import { IncomingForm } from "formidable";
+
 
 // Disable next.js body parser
 export const config = {
@@ -12,7 +13,8 @@ export default async function handler(req, res) {
     res.status(405).send("Method not allowed");
     return;
   }
-  const form = new formidable.IncomingForm({ multiples: false });
+const form = new IncomingForm({ multiples: false });
+
   
   form.parse(req, (err, fields, files) => {
     if (err) {
