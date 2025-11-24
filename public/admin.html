@@ -1,20 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Admin Dashboard</title>
   <style>
-    .delete-btn { color: red; cursor: pointer; }
-    .print-btn { cursor: pointer; }
-    #search { margin-bottom: 10px; }
+    .upload-container { max-width: 600px; margin: 40px auto; border: 1px solid #ddd; padding: 2em; border-radius: 10px; background: #fafafa;}
+    .delete-btn { color: #fff; background: #f44336; border: none; margin-left:10px; padding: 4px 10px; border-radius: 4px; cursor: pointer; }
+    .print-btn { color: #fff; background: #1976D2; border: none; margin-left:10px; padding: 4px 10px; border-radius: 4px; cursor: pointer; }
+    .open-link { margin-right: 10px; }
+    #msg { margin: 10px 0; color: #d84315;}
+    #search { margin: 10px 0; padding:4px; width:60%; }
+    ul { padding-left: 0; }
+    li { list-style: none; margin-bottom: 10px; }
+    #loginBox { text-align: center; margin-top: 4em;}
+    #loginBox input { margin: 4px 0; padding: 6px; width:70%; }
+    #loginBox button { padding: 4px 20px; }
+    h2 { text-align: center; }
   </style>
 </head>
 <body>
-  <div class="upload-container">
+  <div id="loginBox">
+    <h2>Admin Login</h2>
+    <input type="text" id="adminUser" placeholder="Username" /><br>
+    <input type="password" id="adminPass" placeholder="Password" /><br>
+    <button onclick="adminLogin()">Login</button>
+    <div id="loginMsg"></div>
+  </div>
+
+  <div id="adminPanel" style="display:none">
     <h2>Admin Dashboard</h2>
     <input type="text" id="search" placeholder="Search files..." />
-    <button class="print-btn" onclick="window.print()">Print Preview</button>
-    <ul id="fileList"></ul>
+    <ul id="fileList">
+      <!-- List populated by JS -->
+    </ul>
     <div id="msg"></div>
   </div>
   <script src="admin.js"></script>
