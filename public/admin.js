@@ -35,7 +35,7 @@ async function fetchFiles() {
   msgEl.textContent = "";
 }
 
-// Render file list with open/print/delete/search
+// Render file list with Open, Print, Delete
 function renderList() {
   let searchVal = searchEl.value ? searchEl.value.toLowerCase() : "";
   let filtered = fileList.filter(
@@ -45,7 +45,7 @@ function renderList() {
     .map(
       (f) => `
     <li>
-      <a href="${getSupabaseUrl(f.name)}" target="_blank">Open</a>
+      <a href="${getSupabaseUrl(f.name)}" class="open-btn" target="_blank">Open</a>
       ${f.name}
       <button class="print-btn" onclick="printFile('${f.name}')">Print</button>
       <button class="delete-btn" onclick="deleteFile('${f.name}')">Delete</button>
@@ -54,6 +54,7 @@ function renderList() {
     )
     .join("");
 }
+
 
 // Delete
 async function deleteFile(filename) {
