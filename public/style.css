@@ -7,6 +7,27 @@ body, html {
   background: #f4f9fb;
   min-height: 100vh;
 }
+.open-btn {
+  background: #fff;
+  color: #22c1c3;
+  border: 2px solid #22c1c3;
+  border-radius: 22px;
+  padding: 9px 22px;
+  margin-right: 12px;
+  font-weight: 600;
+  font-size: 1em;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 2px 11px #22c1c340;
+  outline: none;
+  display: inline-block;
+  transition: background 0.17s, color 0.15s;
+}
+.open-btn:hover {
+  background: #22c1c3;
+  color: #fff;
+  text-decoration: none;
+}
 
 .upload-container {
   max-width: 420px;
@@ -98,3 +119,4 @@ li {
   .delete-btn, .print-btn, .btn { width: 68%; margin: 7px auto 0 auto;}
   .open-link { margin-bottom: 5px;}
 }
+
