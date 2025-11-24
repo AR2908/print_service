@@ -7,7 +7,10 @@
     "start": "node api/upload.js"
   },
   "dependencies": {
-    "formidable": "^3.4.0"
-  },
+  "@supabase/supabase-js": "^2.38.3",
+  "formidable": "^3.4.0"
+}
+
   "type": "module"
 }
+
