@@ -108,8 +108,8 @@ li {
   padding: 10px;
 }
 #msg {
-  margin: 12px 0 0 0;
-  color: #d84315;
+  margin: 14px 0 0 0;
+  color: Green;
   text-align: center;
 }
 @media (max-width: 600px) {
@@ -119,4 +119,5 @@ li {
   .delete-btn, .print-btn, .btn { width: 68%; margin: 7px auto 0 auto;}
   .open-link { margin-bottom: 5px;}
 }
+
 
