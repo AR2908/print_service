@@ -1,10 +1,5 @@
 import { IncomingForm } from "formidable";
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+export const config = { api: { bodyParser: false } };
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -18,11 +13,7 @@ export default async function handler(req, res) {
       res.status(500).send("File upload error: " + err.message);
       return;
     }
-
-    // Smart file key detection:
-    const uploaded = files.file || files['file'] || Object.values(files)[0];
-    const filename = uploaded?.originalFilename || uploaded?.name || 'undefined';
-
-    res.status(200).send("File " + filename + " uploaded (temporary)!");
+    // Yeh debug line paste karo:
+    res.status(200).json({ fields, files });
   });
 }
