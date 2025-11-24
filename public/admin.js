@@ -1,4 +1,4 @@
-// USERNAME & PASSWORD (change for security, DON'T show real credentials in public code)
+// ====== Admin Login Logic ======
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "1234";
 
@@ -8,23 +8,24 @@ function adminLogin() {
   if (user === ADMIN_USER && pass === ADMIN_PASS) {
     document.getElementById('loginBox').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
+    fetchFiles(); // login ke turant baad files laao
   } else {
     document.getElementById('loginMsg').textContent = 'Invalid credentials!';
   }
 }
 
-// baaki adminPanel ke code ko window.onload = fetchFiles; ke andar wrap kar do!
-window.onload = function() {
-  // Automatically hide adminPanel until login successful
-  document.getElementById('adminPanel').style.display = 'none';
-};
-
+// ====== File Management Logic ======
 const fileListEl = document.getElementById("fileList");
 const searchEl = document.getElementById("search");
 const msgEl = document.getElementById("msg");
 let fileList = [];
 
-// Fetch file list from API
+function getSupabaseUrl(filename) {
+  const base = "https://myctcathdbroxzbvjtdg.supabase.co"; // <-- Apna URL daalo
+  return `${base}/storage/v1/object/public/uploads/${encodeURIComponent(filename)}`;
+}
+
+// Api se file list fetch karo
 async function fetchFiles() {
   msgEl.textContent = "Loading...";
   let res = await fetch("/api/listFiles");
@@ -34,7 +35,7 @@ async function fetchFiles() {
   msgEl.textContent = "";
 }
 
-// Render file list with delete buttons & search filter
+// Render file list with open/print/delete/search
 function renderList() {
   let searchVal = searchEl.value ? searchEl.value.toLowerCase() : "";
   let filtered = fileList.filter(
@@ -44,7 +45,9 @@ function renderList() {
     .map(
       (f) => `
     <li>
+      <a href="${getSupabaseUrl(f.name)}" target="_blank">Open</a>
       ${f.name}
+      <button class="print-btn" onclick="printFile('${f.name}')">Print</button>
       <button class="delete-btn" onclick="deleteFile('${f.name}')">Delete</button>
     </li>
   `
@@ -52,7 +55,7 @@ function renderList() {
     .join("");
 }
 
-// Delete file function
+// Delete
 async function deleteFile(filename) {
   if (!confirm(`Delete ${filename}?`)) return;
   msgEl.textContent = 'Deleting...';
@@ -60,7 +63,7 @@ async function deleteFile(filename) {
   let res = await fetch("/api/deleteFile", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({filename})
+    body: JSON.stringify({ filename })
   });
   let data = await res.json();
   if (data.success) {
@@ -72,7 +75,22 @@ async function deleteFile(filename) {
   }
 }
 
+// Print — only that file
+window.printFile = function(filename) {
+  const url = getSupabaseUrl(filename);
+  const printWindow = window.open(url, '_blank');
+  printWindow.onload = function() {
+    printWindow.print();
+  };
+};
+
+// Search filter
 searchEl.oninput = renderList;
 
-window.deleteFile = deleteFile; // for inline HTML button
-window.onload = fetchFiles;
+// Put delete in window for button
+window.deleteFile = deleteFile;
+
+// ====== Initial Hide Panel on Load ======
+window.onload = function() {
+  document.getElementById('adminPanel').style.display = 'none';
+};
