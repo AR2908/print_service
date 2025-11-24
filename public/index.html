@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Upload Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="upload-container">
+    <h2>Upload Your File</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <label>Select JPG, PNG, PDF file:</label><br>
+      <input type="file" name="file" id="fileInput" accept=".jpg,.jpeg,.png,.pdf" required>
+      <button type="submit">Upload</button>
+    </form>
+    <div class="msg" id="msg"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
