@@ -13,18 +13,8 @@ export default async function handler(req, res) {
       res.status(500).send("File upload error: " + err.message);
       return;
     }
-    // Yeh debug line paste karo:
-   form.parse(req, (err, fields, files) => {
-  if (err) {
-    res.status(500).send("File upload error: " + err.message);
-    return;
-  }
-  // Extract file info from array:
-  const uploaded = files.file?.[0];
-  const filename = uploaded?.originalFilename || uploaded?.name || 'undefined';
-  res.status(200).send("File " + filename + " uploaded (temporary)!");
-});
-
+    const uploaded = files.file?.[0];
+    const filename = uploaded?.originalFilename || uploaded?.name || 'undefined';
+    res.status(200).send("File " + filename + " uploaded (temporary)!");
   });
 }
-
