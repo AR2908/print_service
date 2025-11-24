@@ -9,8 +9,3 @@
     { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "source": "/feedback/((?!general).*)",
-  "destination": "/api/feedback/general"
-}
