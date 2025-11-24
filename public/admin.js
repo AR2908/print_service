@@ -83,6 +83,22 @@ window.printFile = function(filename) {
     printWindow.print();
   };
 };
+window.onload = function() {
+  if (localStorage.getItem("adminLoggedIn") === "true") {
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    fetchFiles();
+  } else {
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('adminPanel').style.display = 'none';
+  }
+};
+function adminLogout() {
+  localStorage.removeItem("adminLoggedIn");
+  document.getElementById('adminPanel').style.display = 'none';
+  document.getElementById('loginBox').style.display = 'block';
+}
+
 
 // Search filter
 searchEl.oninput = renderList;
