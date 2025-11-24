@@ -1,10 +1,57 @@
-const fileList = document.getElementById('fileList');
+const fileListEl = document.getElementById("fileList");
+const searchEl = document.getElementById("search");
+const msgEl = document.getElementById("msg");
+let fileList = [];
 
-// In real use, yahan API call hoti e.g. /api/listFiles
-fileList.innerHTML = `
-  <ul>
-    <li><b>Note:</b> Serverless function par local uploads persist nahi karte.<br>
-      <i>To see real filenames, use cloud storage (S3 etc.) with listing API!<i>
+// Fetch file list from API
+async function fetchFiles() {
+  msgEl.textContent = "Loading...";
+  let res = await fetch("/api/listFiles");
+  let data = await res.json();
+  fileList = data.files || [];
+  renderList();
+  msgEl.textContent = "";
+}
+
+// Render file list with delete buttons & search filter
+function renderList() {
+  let searchVal = searchEl.value ? searchEl.value.toLowerCase() : "";
+  let filtered = fileList.filter(
+    f => !searchVal || f.name.toLowerCase().includes(searchVal)
+  );
+  fileListEl.innerHTML = filtered
+    .map(
+      (f) => `
+    <li>
+      ${f.name}
+      <button class="delete-btn" onclick="deleteFile('${f.name}')">Delete</button>
     </li>
-  </ul>
-`;
+  `
+    )
+    .join("");
+}
+
+// Delete file function
+async function deleteFile(filename) {
+  if (!confirm(`Delete ${filename}?`)) return;
+  msgEl.textContent = 'Deleting...';
+  
+  let res = await fetch("/api/deleteFile", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({filename})
+  });
+  let data = await res.json();
+  if (data.success) {
+    msgEl.textContent = "Deleted!";
+    fileList = fileList.filter(f => f.name !== filename);
+    renderList();
+  } else {
+    msgEl.textContent = "Delete error: " + (data.error || "unknown error");
+  }
+}
+
+searchEl.oninput = renderList;
+
+window.deleteFile = deleteFile; // for inline HTML button
+window.onload = fetchFiles;
