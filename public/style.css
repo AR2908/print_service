@@ -183,9 +183,10 @@ footer {
 }
 @media (max-width:600px){
   .upload-container {padding:18px 3vw;}
-  h1,h2 {font-size:1.3rem;}
+  h1,h2 {font-size:1.8rem;}
   #fileList li {font-size: 0.99rem;}
 }
+
 
 
 
