@@ -13,8 +13,9 @@ export default async function handler(req, res) {
     res.status(405).send("Method not allowed");
     return;
   }
+  const form = new IncomingForm({ multiples: false,maxFileSize: 50 * 1024 * 1024 // 50MB
+});
 
-  const form = new IncomingForm({ multiples: false });
   form.parse(req, async (err, fields, files) => {
     if (err) {
       res.status(500).send("File upload error: " + err.message);
@@ -48,4 +49,5 @@ export default async function handler(req, res) {
     res.status(200).send(`File uploaded successfully`);
   });
 }
+
 
