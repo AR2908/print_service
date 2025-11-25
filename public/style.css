@@ -120,14 +120,6 @@ input[type="text"], input[type="password"] {
 }
 
 /* File list (admin page) */
-#fileList {
-  padding-left: 0;
-  text-align: left;
-  margin: 18px 0 10px 0;
-  min-height: 35px;
-  z-index: 2;
-  position: relative;
-}
 #fileList li {
   list-style: none;
   background: rgba(255,255,255,0.21);
@@ -138,6 +130,15 @@ input[type="text"], input[type="password"] {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;           /* !!! Add this so children wrap on small screens */
+  word-break: break-all;     /* !!! So long filenames wrap inside container */
+  overflow-wrap: anywhere;   /* !!! Modern browsers, breaks very long strings */
+}
+.file-name {
+  flex: 1 1 120px;
+  min-width: 0;
+  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 .open-btn, .print-btn, .delete-btn {
   display: inline-block;
@@ -185,3 +186,4 @@ footer {
   h1,h2 {font-size:1.3rem;}
   #fileList li {font-size: 0.99rem;}
 }
+
