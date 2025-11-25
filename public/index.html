@@ -2,18 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>File Upload Portal</title>
+  <title>Buddha Xerox - Print service</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="upload-container">
-    <h2>File Upload Portal</h2>
+    <h1 style="text-align:center;color:#0a6ebd;">Buddha Xerox</h1>
+    <p style="text-align:center;margin-bottom: 16px;">
+      Welcome! Upload your print files quickly & securely.
+    </p>
+  
     <form id="uploadForm">
+      <label for="fileInput" style="display:block;margin-bottom:6px;">Select file to upload (PDF, DOC, JPG, etc.):</label>
       <input type="file" id="fileInput" name="file" />
-      <button type="submit" class="btn">Upload</button>
+      <button type="submit" class="btn" style="margin-top:10px;">Upload</button>
     </form>
     <div id="msg"></div>
+    
+    <footer style="text-align:center;margin-top:30px;color:#888;">
+      © 2025 Built by @Arjun Bathole | Fast – Secure – Reliable
+    </footer>
   </div>
   <script src="script.js"></script>
 </body>
