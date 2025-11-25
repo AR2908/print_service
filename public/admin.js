@@ -1,21 +1,17 @@
-// Supabase config
 const supabaseUrl = "https://myctcathdbroxzbvjtdg.supabase.co";
 const supabaseKey = "sb_secret_BbnW15bg8W8mLUb11SNU4w_dKclOYf_";
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-// Simple hardcoded login (change for real production use!)
+// Simple login (change credentials for production!)
 function adminLogin() {
   const user = document.getElementById('adminUser').value;
   const pass = document.getElementById('adminPass').value;
-  const loginBox = document.getElementById('loginBox');
-  const adminPanel = document.getElementById('adminPanel');
   const loginMsg = document.getElementById('loginMsg');
-
-  if (user === "admin" && pass === "admin123") { // Example credentials
-    loginBox.style.display = "none";
-    adminPanel.style.display = "block";
+  if (user === "admin" && pass === "admin123") {
+    document.getElementById('loginBox').style.display = "none";
+    document.getElementById('adminPanel').style.display = "block";
     loginMsg.textContent = "";
-    fetchFiles(); // Show file list on login
+    fetchFiles();
   } else {
     loginMsg.textContent = "Invalid credentials!";
   }
@@ -28,30 +24,34 @@ function adminLogout() {
   document.getElementById('adminPanel').style.display = "none";
 }
 
+// Fetch and list files date-wise desc order
 async function fetchFiles() {
   const { data, error } = await supabase.storage.from("uploads").list('');
-  const fileList = document.getElementById('fileList');
+  const fileTableBody = document.querySelector('#fileTable tbody');
   const search = document.getElementById('search').value.toLowerCase();
-  fileList.innerHTML = '';
+  fileTableBody.innerHTML = "";
 
   if (error) {
-    fileList.innerHTML = "<li>Error fetching files!</li>";
+    fileTableBody.innerHTML = "<tr><td colspan='2'>Error fetching files!</td></tr>";
     return;
   }
   if (!data || data.length === 0) {
-    fileList.innerHTML = "<li>No files found.</li>";
+    fileTableBody.innerHTML = "<tr><td colspan='2'>No files found.</td></tr>";
     return;
   }
 
   data
     .filter(file => file.name.toLowerCase().includes(search))
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Descending order
     .forEach(file => {
-      const li = document.createElement('li');
-      li.textContent = file.name;
-      fileList.appendChild(li);
+      const fileDate = file.created_at 
+        ? new Date(file.created_at).toLocaleString()
+        : "N/A";
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${file.name}</td><td>${fileDate}</td>`;
+      fileTableBody.appendChild(tr);
     });
 }
 
-// Optionally: Fetch files while typing in search box
+// Fetch on typing/search
 document.getElementById('search').addEventListener('input', fetchFiles);
-
