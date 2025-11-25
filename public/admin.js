@@ -50,9 +50,11 @@ async function fetchFiles() {
 // Render file list with Open, Print, Delete, Search
 function renderList() {
   let searchVal = searchEl.value ? searchEl.value.toLowerCase() : "";
-  let filtered = fileList.filter(
-    f => !searchVal || f.name.toLowerCase().includes(searchVal)
-  );
+  let filtered = fileList
+    .filter(f => !searchVal || f.name.toLowerCase().includes(searchVal))
+    .slice()    // Safe shallow copy
+    .reverse(); // Latest file sabse pehle
+
   fileListEl.innerHTML = filtered
     .map(
       (f) => `
