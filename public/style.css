@@ -38,7 +38,7 @@ body {
 
 /* Headings for branding consistency */
 h1, h2 {
-  font-size: 3.50rem;
+  font-size: 2.7rem;
   margin-bottom: 10px;
   letter-spacing: 2px;
   font-weight: bold;
@@ -183,9 +183,10 @@ footer {
 }
 @media (max-width:600px){
   .upload-container {padding:18px 3vw;}
-  h1,h2 {font-size:1.8rem;}
+  h1,h2 {font-size:2.00rem;}
   #fileList li {font-size: 0.99rem;}
 }
+
 
 
 
