@@ -1,8 +1,9 @@
-// --- Supabase Config ---
+// Supabase JS client config
 const supabaseUrl = "https://myctcathdbroxzbvjtdg.supabase.co";
 const supabaseKey = "sb_secret_BbnW15bg8W8mLUb11SNU4w_dKclOYf_";
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+// UI elements
 const form = document.getElementById('uploadForm');
 const msg = document.getElementById('msg');
 const fileInput = document.getElementById('fileInput');
@@ -37,11 +38,11 @@ form.addEventListener('submit', async function(e) {
     progressContainer.style.display = 'block';
     progressBar.style.width = '0%';
 
-    // Timestamped filename
+    // Filename with timestamp:
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const newFilename = `${timestamp}_${files[i].name}`;
 
-    // Supabase direct client-side upload with progress
+    // Direct Supabase upload
     const { data, error } = await supabase.storage
       .from('uploads')
       .upload(newFilename, files[i], {
@@ -49,7 +50,7 @@ form.addEventListener('submit', async function(e) {
         upsert: false
       });
 
-    // No native progress in Supabase client yet, so show instantly to 100%
+    // No true progress callback, but show instantly to 100%
     progressBar.style.width = '100%';
 
     if (error) {
