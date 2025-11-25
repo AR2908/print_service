@@ -52,8 +52,8 @@ function renderList() {
   let searchVal = searchEl.value ? searchEl.value.toLowerCase() : "";
   let filtered = fileList
     .filter(f => !searchVal || f.name.toLowerCase().includes(searchVal))
-    .slice()    // Safe shallow copy
-    .reverse(); // Latest file sabse pehle
+    .slice()
+    .reverse(); // Yeh line laga lo
 
   fileListEl.innerHTML = filtered
     .map(
