@@ -186,6 +186,22 @@ footer {
   h1,h2 {font-size:2.00rem;}
   #fileList li {font-size: 0.99rem;}
 }
+.progress-bar-container {
+  width: 96%;
+  background: rgba(10,110,189,0.11);
+  border-radius: 6px;
+  margin: 8px auto 10px auto;
+  height: 15px;
+  overflow: hidden;
+  box-shadow: 0 1px 5px #0a6ebd22;
+}
+.progress-bar {
+  background: linear-gradient(90deg, #13a6e9 50%, #0a6ebd 100%);
+  height: 100%;
+  width: 0%;
+  transition: width 0.25s;
+}
+
 
 
 
