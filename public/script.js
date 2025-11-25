@@ -26,16 +26,21 @@ form.addEventListener('submit', async function(e) {
     msg.textContent = 'Upload failed!';
   }
 });
+// Put this near the top of your script.js, after the pdf.js CDN loads
+if(window['pdfjsLib']) {
+  window['pdfjsLib'].GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.worker.min.js';
+}
+
 document.getElementById('fileInput').addEventListener('change', function(e){
   const file = e.target.files[0];
   const msg = document.getElementById('msg');
   if (file && file.type === 'application/pdf') {
-    // PDF file => show page count
     const fileReader = new FileReader();
     fileReader.onload = async function (ev) {
       const typedArray = new Uint8Array(ev.target.result);
       try {
-        const pdf = await pdfjsLib.getDocument(typedArray).promise;
+        const pdf = await window['pdfjsLib'].getDocument({data: typedArray}).promise;
         msg.textContent = `This PDF has ${pdf.numPages} pages.`;
       } catch (err) {
         msg.textContent = 'Unable to read PDF pages.';
@@ -46,5 +51,3 @@ document.getElementById('fileInput').addEventListener('change', function(e){
     msg.textContent = "";
   }
 });
-
-
