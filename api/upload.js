@@ -45,6 +45,7 @@ export default async function handler(req, res) {
       return;
     }
 
-    res.status(200).send(`File ${newFilename} uploaded successfully`);
+    res.status(200).send(`File uploaded successfully`);
   });
 }
+
