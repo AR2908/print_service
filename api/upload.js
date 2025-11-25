@@ -28,9 +28,14 @@ export default async function handler(req, res) {
 
     const fileBuffer = await fs.promises.readFile(uploaded.filepath);
 
+    // ==== Timestamp wali line INTEGRATE karein =====
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const newFilename = `${timestamp}_${uploaded.originalFilename}`;
+
+    // ==== Supabase Storage me newFilename upload karein ====
     const { data, error } = await supabase.storage
       .from("uploads") // bucket name
-      .upload(uploaded.originalFilename, fileBuffer, {
+      .upload(newFilename, fileBuffer, {
         contentType: uploaded.mimetype || "application/octet-stream",
         upsert: false // true if you want overwrites
       });
@@ -40,7 +45,6 @@ export default async function handler(req, res) {
       return;
     }
 
-    res.status(200).send(`File ${uploaded.originalFilename} uploaded to Succesfully`);
+    res.status(200).send(`File ${newFilename} uploaded successfully`);
   });
 }
-
