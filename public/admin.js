@@ -1,17 +1,21 @@
+// Supabase config
 const supabaseUrl = "https://myctcathdbroxzbvjtdg.supabase.co";
 const supabaseKey = "sb_secret_BbnW15bg8W8mLUb11SNU4w_dKclOYf_";
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-// Simple login (change credentials for production!)
+// Simple hardcoded login (change for real production use!)
 function adminLogin() {
   const user = document.getElementById('adminUser').value;
   const pass = document.getElementById('adminPass').value;
+  const loginBox = document.getElementById('loginBox');
+  const adminPanel = document.getElementById('adminPanel');
   const loginMsg = document.getElementById('loginMsg');
-  if (user === "admin" && pass === "admin123") {
-    document.getElementById('loginBox').style.display = "none";
-    document.getElementById('adminPanel').style.display = "block";
+
+  if (user === "admin" && pass === "12345") { // Example credentials
+    loginBox.style.display = "none";
+    adminPanel.style.display = "block";
     loginMsg.textContent = "";
-    fetchFiles();
+    fetchFiles(); // Show file list on login
   } else {
     loginMsg.textContent = "Invalid credentials!";
   }
@@ -24,34 +28,30 @@ function adminLogout() {
   document.getElementById('adminPanel').style.display = "none";
 }
 
-// Fetch and list files date-wise desc order
 async function fetchFiles() {
   const { data, error } = await supabase.storage.from("uploads").list('');
-  const fileTableBody = document.querySelector('#fileTable tbody');
+  const fileList = document.getElementById('fileList');
   const search = document.getElementById('search').value.toLowerCase();
-  fileTableBody.innerHTML = "";
+  fileList.innerHTML = '';
 
   if (error) {
-    fileTableBody.innerHTML = "<tr><td colspan='2'>Error fetching files!</td></tr>";
+    fileList.innerHTML = "<li>Error fetching files!</li>";
     return;
   }
   if (!data || data.length === 0) {
-    fileTableBody.innerHTML = "<tr><td colspan='2'>No files found.</td></tr>";
+    fileList.innerHTML = "<li>No files found.</li>";
     return;
   }
 
   data
     .filter(file => file.name.toLowerCase().includes(search))
-    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Descending order
     .forEach(file => {
-      const fileDate = file.created_at 
-        ? new Date(file.created_at).toLocaleString()
-        : "N/A";
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${file.name}</td><td>${fileDate}</td>`;
-      fileTableBody.appendChild(tr);
+      const li = document.createElement('li');
+      li.textContent = file.name;
+      fileList.appendChild(li);
     });
 }
 
-// Fetch on typing/search
+// Optionally: Fetch files while typing in search box
 document.getElementById('search').addEventListener('input', fetchFiles);
+
