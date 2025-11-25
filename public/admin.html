@@ -5,7 +5,7 @@
   <title>Admin Dashboard</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="style.css">
-  <!-- Supabase CDN for browser JS -->
+  <!-- Supabase JS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/supabase.min.js"></script>
 </head>
 <body>
@@ -20,7 +20,12 @@
     <h2>Admin Dashboard</h2>
     <input type="text" id="search" placeholder="Search files..." />
     <button onclick="fetchFiles()" class="btn" style="margin-top:9px;">Refresh</button>
-    <ul id="fileList"></ul>
+    <table id="fileTable" style="width:100%;margin-top:10px;">
+      <thead>
+        <tr><th>Filename</th><th>Upload Date</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
     <div id="msg"></div>
     <button onclick="adminLogout()" class="btn" style="margin-top:9px;">Logout</button>
   </div>
