@@ -1,30 +1,65 @@
 const form = document.getElementById('uploadForm');
 const msg = document.getElementById('msg');
+const fileInput = document.getElementById('fileInput');
+const progressBar = document.getElementById('progressBar');
+const progressContainer = document.querySelector('.progress-bar-container');
 
 form.addEventListener('submit', async function(e) {
   e.preventDefault();
   msg.textContent = '';
+  progressContainer.style.display = 'none';
+  progressBar.style.width = '0%';
 
-  const fileInput = document.getElementById('fileInput');
-  const file = fileInput.files[0];
-  if (!file) {
-    msg.textContent = 'Please select a file!';
+  const files = fileInput.files;
+  if (!files || files.length === 0) {
+    msg.textContent = 'Please select at least one file!';
     return;
   }
 
-  const formData = new FormData();
-  formData.append('file', file);
+  let allUploaded = [];
+  for(let i=0; i<files.length; i++) {
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '0%';
 
-  try {
-    const res = await fetch('/api/upload', {
-      method: 'POST',
-      body: formData
+    const formData = new FormData();
+    formData.append('file', files[i]);
+
+    await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/upload', true);
+
+      xhr.upload.onprogress = function(event) {
+        if (event.lengthComputable) {
+          let percent = (event.loaded / event.total) * 100;
+          progressBar.style.width = percent.toFixed(1) + '%';
+        }
+      };
+
+      xhr.onload = function() {
+        if (xhr.status == 200) {
+          allUploaded.push(files[i].name);
+          progressBar.style.width = '100%';
+          resolve(true);
+        } else {
+          msg.textContent = `Failed to upload ${files[i].name}`;
+          progressBar.style.width = '0%';
+          reject();
+        }
+      };
+
+      xhr.onerror = function() {
+        msg.textContent = `Failed to upload ${files[i].name} (network error)`;
+        progressBar.style.width = '0%';
+        reject();
+      };
+
+      xhr.send(formData);
     });
-    const text = await res.text();
-    msg.textContent = text;
-  } catch (err) {
-    msg.textContent = 'Upload failed!';
   }
+
+  progressContainer.style.display = 'none';
+  if(allUploaded.length === files.length) {
+    msg.textContent = `Uploaded successfully: ${allUploaded.join(', ')}`;
+  }
+  form.reset();
 });
-
-
