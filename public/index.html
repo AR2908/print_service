@@ -2,18 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Buddha Xerox - File Upload Portal</title>
+  <title>Buddha Xerox Print service online </title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="upload-container">
     <h1>Buddha Xerox</h1>
-    <hr> </hr>
+    <hr>
     <p>Welcome! <br>Upload your print files quickly & securely.</p>
     <form id="uploadForm">
-      <label for="fileInput">Select file to upload (PDF, DOC, JPG, etc.):</label>
-      <input type="file" id="fileInput" name="file" />
+      <label for="fileInput">Select file(s) to upload (PDF, DOC, JPG, etc.):</label>
+      <input type="file" id="fileInput" name="file" multiple />
+      <div class="progress-bar-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
       <button type="submit" class="btn">Upload</button>
     </form>
     <div id="msg"></div>
@@ -22,13 +25,72 @@
       <br>Fast – Secure – Reliable</br>
     </footer>
   </div>
-  <script src="script.js"></script>
+  <script>
+    const form = document.getElementById('uploadForm');
+    const msg = document.getElementById('msg');
+    const fileInput = document.getElementById('fileInput');
+    const progressBar = document.getElementById('progressBar');
+    const progressContainer = document.getElementById('progressContainer');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      msg.textContent = '';
+      progressContainer.style.display = 'none';
+      progressBar.style.width = '0%';
+
+      const files = fileInput.files;
+      if (!files || files.length === 0) {
+        msg.textContent = 'Please select at least one file!';
+        return;
+      }
+
+      let allUploaded = [];
+      for(let i=0; i<files.length; i++) {
+        progressContainer.style.display = 'block';
+        progressBar.style.width = '0%';
+
+        const formData = new FormData();
+        formData.append('file', files[i]);
+
+        await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', '/api/upload', true);
+
+          xhr.upload.onprogress = function(event) {
+            if (event.lengthComputable) {
+              let percent = (event.loaded / event.total) * 100;
+              progressBar.style.width = percent.toFixed(1) + '%';
+            }
+          };
+
+          xhr.onload = function() {
+            if (xhr.status == 200) {
+              allUploaded.push(files[i].name);
+              progressBar.style.width = '100%';
+              resolve(true);
+            } else {
+              msg.textContent = `Failed to upload ${files[i].name}`;
+              progressBar.style.width = '0%';
+              reject();
+            }
+          };
+
+          xhr.onerror = function() {
+            msg.textContent = `Failed to upload ${files[i].name} (network error)`;
+            progressBar.style.width = '0%';
+            reject();
+          };
+
+          xhr.send(formData);
+        });
+      }
+
+      progressContainer.style.display = 'none';
+      if(allUploaded.length === files.length) {
+        msg.textContent = `Uploaded successfully: ${allUploaded.join(', ')}`;
+      }
+      form.reset();
+    });
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
